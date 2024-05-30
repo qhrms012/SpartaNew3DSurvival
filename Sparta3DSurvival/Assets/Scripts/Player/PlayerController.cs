@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour
         dir *= MoveSpeed;
         dir.y = _rigidbody.velocity.y;
         _rigidbody.velocity = dir;
-        //IsMoving = true;
     }
 
     void CameraLook()
