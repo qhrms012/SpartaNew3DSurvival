@@ -19,7 +19,13 @@ public class PlayerController : MonoBehaviour
     public float lookSensitivity;
     private Vector2 mouseDelta;
 
+
+
+
     public bool canLook = true;
+
+    public bool IsMoving {  get; private set; }
+
 
     public Action inventory;
 
@@ -61,8 +67,8 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
         dir *= MoveSpeed;
         dir.y = _rigidbody.velocity.y;
-
         _rigidbody.velocity = dir;
+        //IsMoving = true;
     }
 
     void CameraLook()
@@ -79,11 +85,13 @@ public class PlayerController : MonoBehaviour
         if(context.phase == InputActionPhase.Performed)
         {
             curMovementInput = context.ReadValue<Vector2>();
+            IsMoving = true;
 
         }
         else if(context.phase == InputActionPhase.Canceled)
         {
             curMovementInput = Vector2.zero;
+            IsMoving = false;
         }
     }
 

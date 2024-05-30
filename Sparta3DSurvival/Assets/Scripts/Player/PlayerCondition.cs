@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -10,6 +11,7 @@ public interface IDamagalbe
 }
 public class PlayerCondition : MonoBehaviour, IDamagalbe
 {
+    PlayerController controller;
     public UICondition uicondition;
 
     Condition health { get { return uicondition.health; } }
@@ -19,11 +21,26 @@ public class PlayerCondition : MonoBehaviour, IDamagalbe
     public float noHungerHealthDecay;
 
     public event Action onTakeDamage;
+
+    private void Awake()
+    {
+        controller = GetComponent<PlayerController>();
+    }
+
     void Update()
     {
-        
+        if (controller.IsMoving == true)
+        {
+            stamina.Subtract(stamina.passiveValue * Time.deltaTime);
+        }
+        else
+        {
+            stamina.Add(stamina.passiveValue * Time.deltaTime);
+        }
+
+
         hunger.Subtract(hunger.passiveValue * Time.deltaTime);
-        stamina.Add(stamina.passiveValue * Time.deltaTime);
+        
 
         if(hunger.curValue == 0f)
         {
@@ -45,7 +62,9 @@ public class PlayerCondition : MonoBehaviour, IDamagalbe
     public void Eat(float amout)
     {
         hunger.Add(amout);
+        stamina.Add(amout);
     }
+    
 
     public void Die()
     {
